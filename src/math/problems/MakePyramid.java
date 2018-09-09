@@ -5,15 +5,34 @@ public class MakePyramid {
 
         /*   Implement a large Pyramid of stars in the screen with java.
 
-                              *
-                             * *
-                            * * *
-                           * * * *
-                          * * * * *
-                         * * * * * *
+         *
+         * *
+         * * *
+         * * * *
+         * * * * *
+         * * * * * *
 
-        */
+         */
+        int n = 8;
+        printTriagle(n);
 
+    }
 
+    public static void printTriagle(int n) {
+        int k = 7 * n - 7;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < k; j++) {
+                System.out.print("");
+            }
+
+            k = k - 1;
+
+            for (int j = 0; j <= i; j++) {
+                // printing stars
+                System.out.print("* ");
+            }
+            System.out.println();
         }
-  }
+    }
+}

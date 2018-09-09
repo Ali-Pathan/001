@@ -12,7 +12,16 @@ public class PrimeNumber {
 		 * Use any databases[MongoDB, Oracle, MySql] to store data and retrieve data.
 		 *
 		 */
+		int n = 1000000;
 
+		System.out.print("Following are the prime numbers ");
+		System.out.println("smaller than or equal to " + n);
+
+		PrimeNumber g = new PrimeNumber();
+		g.sieveOfEratosthenes(n);
+	}
+
+	private void sieveOfEratosthenes(int n) {
 	}
 
 }
