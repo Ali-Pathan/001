@@ -3,11 +3,10 @@ package algorithm;
 public class Sort {
 
     long executionTime = 0;
-	/*
-	 * Please implement all the sorting algorithm. Feel free to add helper methods.
-	 * Store all the sorted data into one of the databases.
-	 */
-
+    /*
+     * Please implement all the sorting algorithm. Feel free to add helper methods.
+     * Store all the sorted data into one of the databases.
+     */
 
 
     public int[] selectionSort(int [] array){
@@ -36,16 +35,17 @@ public class Sort {
         final long startTime = System.currentTimeMillis();
         int [] list = array;
         //implement here
-        for (int i = 1; i < list.length; i++) {
-            int temp = list[i];
-            int hole = i;
-
-            while (hole > 0 && list[hole-1] >temp) {
-                list[hole] = list[hole-1];
-                hole = hole - 1;
+        int temp;
+        for (int i = 0; i < array.length; i++) {
+            for (int j=i;j>0;j--){
+                if(array[j]<array[j-1]){
+                    temp=array[j];
+                    array[j]=array[j-1];
+                    array[j-1]=temp;
+                }
             }
-            list[hole] =temp;
         }
+
 
 
         final long endTime = System.currentTimeMillis();
@@ -58,195 +58,203 @@ public class Sort {
         int [] list = array;
         //implement here
         final long startTime = System.currentTimeMillis();
-        for (int z = 0; z < list.length - 1;z++) {       // n times 10
-            for (int a = 0; a < list.length-1-z; a++) {  // n times 10
-                if (list[a] > list[a + 1]) {
-                    int temp = list[a];                  // n * n == n^2
-                    list[a] = list[a + 1];                 // 10 * 10 = 100
-                    list[a + 1] = temp;
+        for(int i=0;i<list.length;i++){
+            for(int j=0;j<list.length-1;j++){
+                if(list[j]>list[j+1]){
+                    int temp=list[j];
+                    list[j]=list[j+1];
+                    list[j+1]=temp;
                 }
             }
         }
-
-
         final long endTime = System.currentTimeMillis();
         final long executionTime = endTime - startTime;
         this.executionTime = executionTime;
+
         return list;
     }
+    void merge(int list[],int low,int midd,int high) {
 
+        int i, j, k;
+        int leftArrayLength = midd - low + 1;
+        int rightArrayLength = high - midd;
 
-    void merge(int arr[], int l, int m, int r)
-    {
-        // Find sizes of two subarrays to be merged
-        int n1 = m-l + 1;
-        int n2 = r - m;
+        int[] leftArray = new int[leftArrayLength];
+        int[] rightArray = new int[rightArrayLength];
 
-        /* Create temp arrays */
-        int L[] = new int [n1];
-        int R[] = new int [n2];
+        for (i = 0; i < leftArrayLength; i++) {
+            leftArray[i] = list[low + i];
+            for (j = 0; j < rightArrayLength; j++) {
+                rightArray[j] = list[midd + 1 + j];
 
-        /*Copy data to temp arrays*/
-        for (int i=0; i<n1; i++)
-            L[i] = arr[l+i];
-        for (int j=0; j<n2; j++)
-            R[j] = arr[m + 1+ j];
+                i = 0;
+                j = 0;
+                k = low;
+                while (i < leftArrayLength && j < rightArrayLength) {
+                    if (leftArray[i] <= rightArray[j]) {
+                        list[k] = leftArray[i];
+                        i++;
+                    } else {
+                        list[k] = rightArray[j];
+                        j++;
+                    }
+                    k++;
+                }
 
+                while (i < leftArrayLength) {
+                    list[k] = leftArray[i];
+                    i++;
+                    k++;
 
-        /* Merge the temp arrays */
-
-        // Initial indexes of first and second subarrays
-        int i = 0, j = 0;
-
-        // Initial index of merged subarry array
-        int k = l;
-        while (i < n1 && j < n2)
-        {
-            if (L[i] <= R[j])
-            {
-                arr[k] = L[i];
-                i++;
-            }
-            else
-            {
-                arr[k] = R[j];
-                j++;
-            }
-            k++;
-        }
-
-        /* Copy remaining elements of L[] if any */
-        while (i < n1)
-        {
-            arr[k] = L[i];
-            i++;
-            k++;
-        }
-
-        /* Copy remaining elements of R[] if any */
-        while (j < n2)
-        {
-            arr[k] = R[j];
-            j++;
-            k++;
-        }
-    }
-
-
-    void sort(int arr[], int l, int r)
-    {
-        final long startTime = System.currentTimeMillis();
-        if (l < r)
-        {
-            // Find the middle point
-            int m = (l+r)/2;
-
-            // Sort first and second halves
-            sort(arr, l, m);
-            sort(arr , m+1, r);
-
-            // Merge the sorted halves
-            merge(arr, l, m, r);
-        }
-        final long endTime = System.currentTimeMillis();
-        final long executionTime = endTime - startTime;
-        this.executionTime = executionTime;
-    }
-
-
-
-    int partition(int arr[], int low, int high)
-    {
-        int pivot = arr[high];
-        int pindex = (low-1); // index of smaller element
-        for (int j=low; j<high; j++)
-        {
-            // If current element is smaller than or
-            // equal to pivot
-            if (arr[j] <= pivot)
-            {
-                pindex++;
-
-                // swap arr[i] and arr[j]
-                int temp = arr[pindex];
-                arr[pindex] = arr[j];
-                arr[j] = temp;
+                }
+                while (j < rightArrayLength) {
+                    list[k] = rightArray[j];
+                    j++;
+                    k++;
+                }
             }
         }
-        pindex++;
-        // swap arr[i+1] and arr[high] (or pivot)
-        int temp = arr[pindex];
-        arr[pindex] = arr[high];
-        arr[high] = temp;
-
-        return pindex;
     }
 
-    void Quicksort(int arr[], int low, int high)
-    {
-        final long startTime = System.currentTimeMillis();
-        if (low < high)
-        {
-            /* pi is partitioning index, arr[pi] is
-              now at right place */
-            int pi = partition(arr, low, high);
-
-            // Recursively sort elements before
-            // partition and after partition
-            sort(arr, low, pi-1);
-            sort(arr, pi+1, high);
-        }
-        final long endTime = System.currentTimeMillis();
-        final long executionTime = endTime - startTime;
-        this.executionTime = executionTime;
-    }
-
-    public int [] heapSort(int [] array){
-        int [] list = array;
+    public int [] mergeSort(int [] array, int firstIndex,int lastIndex){
         //implement here
+
+        final long startTime=System.currentTimeMillis();
+        int[] list = array;
+        int low =firstIndex;
+        int high =lastIndex;
+        if(low<high){
+            int midd=low+(high-low)/2;
+            mergeSort(list,low,midd);
+            mergeSort(list,midd+1,high);
+
+            merge(list,low,midd,high);
+        }
+        final long endTime=System.currentTimeMillis();
+        final long executionTime=endTime-startTime;
+        this.executionTime=executionTime;
+        return list;
+    }
+    int partition (int list[],int low,int high){
+        int pivot=list[high];
+        int i=(low-1);
+
+        for(int j = low;j<=high-1;j++){
+            if(list[j]<=pivot){
+                i++;
+                int temp=list[i];
+                list[i]=list[j];
+                list[j]=temp;
+            }
+        }
+        int temp=list[i+1];
+        list[i+1]=list[high];
+        list[high]=temp;
+        return(i+1);
+    }
+
+
+    public int [] quickSort(int [] array,int firstIndex, int lastIndex){
+        //implement here
+        final long startTime=System.currentTimeMillis();
+        int[] list = array;
+        int low =firstIndex;
+        int high=lastIndex;
+        if(low<high){
+            int pi=partition(list,low,high);
+            quickSort(list,low,pi-1);
+            quickSort(list,pi+1,high);
+        }
+
+        final long endTime=System.currentTimeMillis();
+        final long executionTime=endTime-startTime;
+        this.executionTime=executionTime;
+
+        return list;
+    }
+    void heapify(int list[],int arrayLength,int rootIndex) {
+        int largest = rootIndex;
+        int leftNodeIndex = 2 * rootIndex + 1;
+        int rightNodeIndex = 2 * rootIndex + 2;
+
+        if (leftNodeIndex < arrayLength && list[leftNodeIndex] > list[largest]) {
+            largest = leftNodeIndex;
+
+            if (rightNodeIndex < arrayLength && list[rightNodeIndex] > list[largest]) {
+                largest = rightNodeIndex;
+
+                if (largest != rootIndex) {
+                    int temp = list[rootIndex];
+                    list[rootIndex] = list[largest];
+                    list[largest] = temp;
+
+                    heapify(list, arrayLength, largest);
+                }
+            }
+        }
+    }
+
+
+    public int [] heapSort(int [] array,int arrayLength){
+        //implement here
+
         final long startTime = System.currentTimeMillis();
+        int[] list = array;
+        //implement here
+        for (int i = arrayLength / 2 - 1; i >= 0; i--) {
 
+            heapify(list, arrayLength, i);
+        }
+        for (int i= arrayLength - 1; i >= 0; i--) {
+            int temp = list[0];
+            list[0] = list[i];
+            list[i] = temp;
+            heapify(list, i, 0);
 
+        }
 
         final long endTime = System.currentTimeMillis();
         final long executionTime = endTime - startTime;
         this.executionTime = executionTime;
+
+
         return list;
     }
 
 
-    public int[] Bucketsort(int[] sequence, int maxValue)
-    {
+    public int [] bucketSort(int [] array, int maxArrayElementValue){
+        //implement here
+
         final long startTime = System.currentTimeMillis();
-        // Bucket Sort
-        int[] Bucket = new int[maxValue + 1];
-        int[] sorted_sequence = new int[sequence.length];
+        int[] list = array;
+        //implement here
+        int max = maxArrayElementValue;
+        int[] bucket = new int[max + 1];
 
-        for (int i = 0; i < sequence.length; i++)
-            Bucket[sequence[i]]++;
+        for (int i = 0; i < list.length; i++) {
+            bucket[list[i]]++;
+        }
+        int position = 0;
+        for (int i = 0; i < bucket.length; i++) {
+            for (int j = 0; j < bucket[i]; j++) {
+                list[position++] = i;
 
-        int outPos = 0;
-        for (int i = 0; i < Bucket.length; i++)
-            for (int j = 0; j < Bucket[i]; j++)
-                sorted_sequence[outPos++] = i;
-
+            }
+        }
         final long endTime = System.currentTimeMillis();
         final long executionTime = endTime - startTime;
         this.executionTime = executionTime;
-        return sorted_sequence;
 
+
+        return list;
     }
 
     public int [] shellSort(int [] array){
         int [] list = array;
         //implement here
-        final long startTime = System.currentTimeMillis();
 
 
 
-        final long endTime = System.currentTimeMillis();
-        final long executionTime = endTime - startTime;
-        this.executionTime = executionTime;
         return list;
     }
 
